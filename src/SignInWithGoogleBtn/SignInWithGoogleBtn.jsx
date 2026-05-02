@@ -1,5 +1,5 @@
 import React from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { app } from "../firebase/firebaseInit";
 
 const auth = getAuth(app);
@@ -11,11 +11,22 @@ export default function SignInWithGoogleBtn() {
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        const user = result.user;
-        setUser(user);
+        const userInfo = result.user;
+        // console.log("User Info:", userInfo);
+        setUser(userInfo);
       })
       .catch((error) => {
         console.error("Error signing in:", error.message);
+      });
+  };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setUser(null);
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error.message);
       });
   };
 
@@ -24,15 +35,22 @@ export default function SignInWithGoogleBtn() {
       <div>
         <h1>Explore with Firebase</h1>
       </div>
-      <div>
-        <img src={user?.photoURL || ""} alt="Profile  " />
-      </div>
-      <div>{user && <p>Welcome, {user.displayName}!</p>}</div>
-      <div>{user && <p>{user.email}</p>}</div>
 
-      <button onClick={handleGoogleSignIn} className="btn btn-primary">
-        Sign In With Google
-      </button>
+      <div>
+        {user && (
+          <>
+            <p>Welcome, {user.displayName}!</p>
+            <p>{user.email}</p>
+          </>
+        )}
+      </div>
+
+      {user ? (
+        <button onClick={handleSignOut}>Sign Out</button>
+      ) : (
+        <button onClick={handleGoogleSignIn}>Sign In With Google</button>
+      )}
+
     </div>
   );
 }

@@ -1,5 +1,6 @@
 
 import './App.css'
+import SigninWithFB from './SigninWithFB/SigninWithFB'
 import SignInWithGoogleBtn from './SignInWithGoogleBtn/SignInWithGoogleBtn'
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
   return (
     <>
       <SignInWithGoogleBtn />
+      {/* <SigninWithFB/> */}
    </> 
   )
 }
